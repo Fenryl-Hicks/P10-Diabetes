@@ -9,6 +9,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{D6B86E8F
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PatientService", "PatientService\PatientService.csproj", "{14F295B7-E3BC-4DD6-95D1-29BBF680B90D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdentityService", "IdentityService\IdentityService.csproj", "{4A7371E5-136D-4531-89D1-7D80D29BF9B7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,12 +21,17 @@ Global
 		{14F295B7-E3BC-4DD6-95D1-29BBF680B90D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{14F295B7-E3BC-4DD6-95D1-29BBF680B90D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{14F295B7-E3BC-4DD6-95D1-29BBF680B90D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4A7371E5-136D-4531-89D1-7D80D29BF9B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4A7371E5-136D-4531-89D1-7D80D29BF9B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4A7371E5-136D-4531-89D1-7D80D29BF9B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4A7371E5-136D-4531-89D1-7D80D29BF9B7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{14F295B7-E3BC-4DD6-95D1-29BBF680B90D} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{4A7371E5-136D-4531-89D1-7D80D29BF9B7} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {227452E4-7B7A-48A9-ABB1-162216DD9975}
