@@ -1,0 +1,37 @@
+{
+    "Routes": [
+        {
+            "DownstreamPathTemplate": "/api/auth/{everything}",
+            "DownstreamScheme": "https",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 7010
+                }
+            ],
+            "UpstreamPathTemplate": "/api/auth/{everything}",
+            "UpstreamHttpMethod": [ "POST" ],
+            "RouteIsCaseSensitive": false
+        },
+        {
+            "DownstreamPathTemplate": "/api/patients/{everything}",
+            "DownstreamScheme": "https",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 7070
+                }
+            ],
+            "UpstreamPathTemplate": "/api/patients/{everything}",
+            "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ],
+            "AuthenticationOptions": {
+                "AuthenticationProviderKey": "GatewayAuthenticationScheme",
+                "AllowedScopes": []
+            },
+            "RouteIsCaseSensitive": false
+        }
+    ],
+    "GlobalConfiguration": {
+        "BaseUrl": "https://localhost:7050"
+    }
+}

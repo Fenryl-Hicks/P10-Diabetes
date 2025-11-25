@@ -2,6 +2,7 @@
 using PatientService.Models;
 using PatientService.Repositories.Interfaces;
 using PatientService.Services.Interfaces;
+using PatientService.Utilities;
 
 namespace PatientService.Services
 {
@@ -17,77 +18,40 @@ namespace PatientService.Services
         public async Task<List<PatientDto>> GetAllAsync()
         {
             var patients = await _repository.GetAllAsync();
-            return patients.Select(p => new PatientDto
-            {
-                Id = p.Id,
-                FullName = $"{p.FirstName} {p.LastName}",
-                BirthDate = p.BirthDate
-            }).ToList();
+            return patients.Select(Mapping.ToPatientDto).ToList();
         }
 
-        public async Task<PatientDto?> GetByIdAsync(Guid id)
+        public async Task<PatientDto?> GetByIdAsync(int id)
         {
             var patient = await _repository.GetByIdAsync(id);
-            if (patient is null) return null;
-
-            return new PatientDto
-            {
-                Id = patient.Id,
-                FullName = $"{patient.FirstName} {patient.LastName}",
-                BirthDate = patient.BirthDate
-            };
+            return patient is null ? null : Mapping.ToPatientDto(patient);
         }
 
-        public async Task<PatientDto> CreateAsync(PatientDto dto)
+        public async Task<PatientDto> CreateAsync(CreatePatientDto dto)
         {
-            var names = dto.FullName.Split(' ', 2); // Séparer prénom/nom
-            var patient = new Patient
-            {
-                FirstName = names.ElementAtOrDefault(0) ?? "",
-                LastName = names.ElementAtOrDefault(1) ?? "",
-                BirthDate = dto.BirthDate
-            };
-
+            var patient = Mapping.ToPatient(dto);
             await _repository.AddAsync(patient);
             await _repository.SaveChangesAsync();
-
-            return new PatientDto
-            {
-                Id = patient.Id,
-                FullName = $"{patient.FirstName} {patient.LastName}",
-                BirthDate = patient.BirthDate
-            };
+            return Mapping.ToPatientDto(patient);
         }
-        public async Task<PatientDto?> UpdateAsync(Guid id, PatientDto dto)
+
+        public async Task<PatientDto?> UpdateAsync(int id, UpdatePatientDto dto)
         {
             var existing = await _repository.GetByIdAsync(id);
             if (existing is null) return null;
-
-            var names = dto.FullName.Split(' ', 2);
-            existing.FirstName = names.ElementAtOrDefault(0) ?? "";
-            existing.LastName = names.ElementAtOrDefault(1) ?? "";
-            existing.BirthDate = dto.BirthDate;
-
+            Mapping.UpdatePatientFromDto(existing, dto);
             await _repository.UpdateAsync(existing);
             await _repository.SaveChangesAsync();
-
-            return new PatientDto
-            {
-                Id = existing.Id,
-                FullName = $"{existing.FirstName} {existing.LastName}",
-                BirthDate = existing.BirthDate
-            };
+            return Mapping.ToPatientDto(existing);
         }
 
-        public async Task<bool> DeleteAsync(Guid id)
+        public async Task<bool> DeleteAsync(int id)
         {
             var existing = await _repository.GetByIdAsync(id);
             if (existing is null) return false;
-
             await _repository.DeleteAsync(existing);
             await _repository.SaveChangesAsync();
             return true;
         }
-
     }
 }

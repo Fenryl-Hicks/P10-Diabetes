@@ -46,24 +46,12 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 
-
 var app = builder.Build();
 
-// Seed user (dev only)
+// Seed admin user and role
 using (var scope = app.Services.CreateScope())
 {
-    var userMgr = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
-    var user = await userMgr.FindByNameAsync("practitioner@clinic.test");
-    if (user is null)
-    {
-        var newUser = new IdentityUser
-        {
-            UserName = "practitioner@clinic.test",
-            Email = "practitioner@clinic.test",
-            EmailConfirmed = true
-        };
-        await userMgr.CreateAsync(newUser, "P@ssw0rd!");
-    }
+    await RoleInitializer.InitializeAsync(scope.ServiceProvider);
 }
 
 if (app.Environment.IsDevelopment())

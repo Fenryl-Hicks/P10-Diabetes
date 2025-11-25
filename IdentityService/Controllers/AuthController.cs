@@ -34,6 +34,20 @@ public class AuthController : ControllerBase
         });
     }
 
+    [HttpPost("login")]
+    public async Task<IActionResult> Login([FromBody] LoginRequest request)
+    {
+        var token = await _authService.GenerateTokenAsync(request.Username, request.Password);
+
+        if (token is null)
+            return Unauthorized();
+
+        return Ok(new
+        {
+            token
+        });
+    }
+
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegisterRequest request)
     {
