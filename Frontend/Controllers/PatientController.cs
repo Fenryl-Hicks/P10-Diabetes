@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using P10.Frontend.Models;
 using P10.Frontend.Services;
 
@@ -9,6 +10,15 @@ public class PatientController : Controller
     public PatientController(IPatientApiClient patientApiClient)
     {
         _patientApiClient = patientApiClient;
+    }
+
+    private List<SelectListItem> GetGenders()
+    {
+        return new List<SelectListItem>
+        {
+            new SelectListItem { Value = "1", Text = "Homme" },
+            new SelectListItem { Value = "2", Text = "Femme" }
+        };
     }
 
     public async Task<IActionResult> Index()
@@ -37,6 +47,7 @@ public class PatientController : Controller
     [HttpGet]
     public IActionResult Create()
     {
+        ViewBag.Genders = GetGenders();
         return View();
     }
 
@@ -47,6 +58,7 @@ public class PatientController : Controller
         if (string.IsNullOrEmpty(token))
             return RedirectToAction("Login", "Auth");
 
+        ViewBag.Genders = GetGenders();
         var success = await _patientApiClient.CreatePatientAsync(model, token);
         if (!success)
         {
@@ -68,6 +80,7 @@ public class PatientController : Controller
         if (patient == null)
             return NotFound();
 
+        ViewBag.Genders = GetGenders();
         return View(patient);
     }
 
@@ -78,6 +91,7 @@ public class PatientController : Controller
         if (string.IsNullOrEmpty(token))
             return RedirectToAction("Login", "Auth");
 
+        ViewBag.Genders = GetGenders();
         var success = await _patientApiClient.UpdatePatientAsync(model, token);
         if (!success)
         {

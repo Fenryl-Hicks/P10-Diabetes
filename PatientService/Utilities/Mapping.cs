@@ -14,6 +14,7 @@ namespace PatientService.Utilities
                 LastName = patient.LastName,
                 BirthDate = patient.BirthDate,
                 GenderId = patient.GenderId,
+                GenderName = patient.Gender?.Name ?? string.Empty,
                 Address = patient.Address,
                 Phone = patient.Phone
             };

@@ -1,5 +1,6 @@
 ﻿@{
     var title = ViewData["Title"] as string ?? "P10.Frontend";
+    bool isAuthenticated = Context.Session.GetString("JwtToken") != null;
 }
 
 <!DOCTYPE html>
@@ -35,19 +36,30 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Patients" asp-action="Index">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Patient" asp-action="Index">
                                 Patients
                             </a>
                         </li>
                     </ul>
 
-                    <!-- Zone de droite : Login -->
+                    <!-- Zone de droite : Login/Logout -->
                     <ul class="navbar-nav">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Auth" asp-action="Login">
-                                Connexion
-                            </a>
-                        </li>
+                        @if (!isAuthenticated)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Auth" asp-action="Login">
+                                    Connexion
+                                </a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <form asp-controller="Auth" asp-action="Logout" method="post" class="d-inline">
+                                    <button type="submit" class="nav-link btn btn-link text-dark" style="padding:0;">Déconnexion</button>
+                                </form>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>

@@ -16,13 +16,18 @@ namespace PatientService.Repositories
 
         public async Task<List<Patient>> GetAllAsync()
         {
-            return await _context.Patients.Where(p => !p.IsDeleted).ToListAsync();
+            return await _context.Patients
+                .Include(p => p.Gender)
+                .Where(p => !p.IsDeleted)
+                .ToListAsync();
         }
 
         public async Task<Patient?> GetByIdAsync(int id)
         {
-            var patient = await _context.Patients.FindAsync(id);
-            return (patient != null && !patient.IsDeleted) ? patient : null;
+            var patient = await _context.Patients
+                .Include(p => p.Gender)
+                .FirstOrDefaultAsync(p => p.Id == id && !p.IsDeleted);
+            return patient;
         }
 
         public async Task AddAsync(Patient patient)

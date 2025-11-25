@@ -38,6 +38,15 @@ else
     </dl>
 
     <a asp-controller="Patient"
+       asp-action="Edit"
+       asp-route-id="@Model.Id"
+       class="btn btn-warning mt-3">
+        Modifier
+    </a>
+    <form asp-controller="Patient" asp-action="Delete" asp-route-id="@Model.Id" method="post" style="display:inline">
+        <button type="submit" class="btn btn-danger mt-3" onclick="return confirm('Confirmer la suppression ?');">Supprimer</button>
+    </form>
+    <a asp-controller="Patient"
        asp-action="Index"
        class="btn btn-secondary mt-3">
         Retour à la liste
