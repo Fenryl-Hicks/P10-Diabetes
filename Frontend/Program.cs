@@ -6,7 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddHttpClient<IPatientApiClient, PatientApiClient>();
-
+builder.Services.AddHttpClient<INoteApiClient, NoteApiClient>();
 
 // HttpClient typé pour appeler IdentityService
 builder.Services.AddHttpClient<IAuthApiClient, AuthApiClient>(client =>

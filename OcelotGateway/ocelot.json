@@ -29,6 +29,23 @@
                 "AllowedScopes": []
             },
             "RouteIsCaseSensitive": false
+        },
+        {
+            "DownstreamPathTemplate": "/api/notes/{everything}",
+            "DownstreamScheme": "https",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 7080
+                }
+            ],
+            "UpstreamPathTemplate": "/api/notes/{everything}",
+            "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ],
+            "AuthenticationOptions": {
+                "AuthenticationProviderKey": "GatewayAuthenticationScheme",
+                "AllowedScopes": []
+            },
+            "RouteIsCaseSensitive": false
         }
     ],
     "GlobalConfiguration": {
