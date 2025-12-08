@@ -7,6 +7,7 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddHttpClient<IPatientApiClient, PatientApiClient>();
 builder.Services.AddHttpClient<INoteApiClient, NoteApiClient>();
+builder.Services.AddHttpClient<IAssessmentApiClient, AssessmentApiClient>();
 
 // HttpClient typé pour appeler IdentityService
 builder.Services.AddHttpClient<IAuthApiClient, AuthApiClient>(client =>

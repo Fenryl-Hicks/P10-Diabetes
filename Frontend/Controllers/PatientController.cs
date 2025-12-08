@@ -6,10 +6,12 @@ using P10.Frontend.Services;
 public class PatientController : Controller
 {
     private readonly IPatientApiClient _patientApiClient;
+    private readonly IAssessmentApiClient _assessmentApiClient;
 
-    public PatientController(IPatientApiClient patientApiClient)
+    public PatientController(IPatientApiClient patientApiClient, IAssessmentApiClient assessmentApiClient)
     {
         _patientApiClient = patientApiClient;
+        _assessmentApiClient = assessmentApiClient;
     }
 
     private List<SelectListItem> GetGenders()
@@ -40,6 +42,10 @@ public class PatientController : Controller
         var patient = await _patientApiClient.GetPatientByIdAsync(id, token);
         if (patient == null)
             return NotFound();
+
+        // Récupérer le niveau de risque de diabète
+        var risk = await _assessmentApiClient.GetPatientRiskAsync(id, token);
+        patient.DiabetesRisk = risk ?? "Unknown";
 
         return View(patient);
     }

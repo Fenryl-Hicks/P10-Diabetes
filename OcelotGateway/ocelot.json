@@ -46,6 +46,23 @@
                 "AllowedScopes": []
             },
             "RouteIsCaseSensitive": false
+        },
+        {
+            "DownstreamPathTemplate": "/api/assessment/{everything}",
+            "DownstreamScheme": "https",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 7008
+                }
+            ],
+            "UpstreamPathTemplate": "/api/assessment/{everything}",
+            "UpstreamHttpMethod": [ "GET" ],
+            "AuthenticationOptions": {
+                "AuthenticationProviderKey": "GatewayAuthenticationScheme",
+                "AllowedScopes": []
+            },
+            "RouteIsCaseSensitive": false
         }
     ],
     "GlobalConfiguration": {

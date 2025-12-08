@@ -2,6 +2,18 @@
 
 @{
     ViewData["Title"] = "Détail du patient";
+    
+    string GetRiskLabel(string? risk)
+    {
+        return risk switch
+        {
+            "None" => "Aucun risque",
+            "Borderline" => "Risque limité",
+            "InDanger" => "Danger",
+            "EarlyOnset" => "Apparition précoce",
+            _ => "Inconnu"
+        };
+    }
 }
 
 <h1 class="mt-4">Détail du patient</h1>
@@ -32,6 +44,9 @@ else
 
         <dt class="col-sm-3">Téléphone</dt>
         <dd class="col-sm-9">@Model.Phone</dd>
+
+        <dt class="col-sm-3">Risque de diabète</dt>
+        <dd class="col-sm-9">@GetRiskLabel(Model.DiabetesRisk)</dd>
     </dl>
 
     <a asp-controller="Note"
