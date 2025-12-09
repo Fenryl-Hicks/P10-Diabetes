@@ -6,8 +6,12 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Charger le fichier ocelot.json
-builder.Configuration.AddJsonFile("ocelot.json", optional: false, reloadOnChange: true);
+// Détecter l'environnement Docker et charger le bon fichier ocelot.json
+var ocelotConfigFile = builder.Environment.EnvironmentName == "Docker" 
+    ? "ocelot.Docker.json" 
+    : "ocelot.json";
+
+builder.Configuration.AddJsonFile(ocelotConfigFile, optional: false, reloadOnChange: true);
 
 // Authentification JWT pour Ocelot
 builder.Services.AddAuthentication("GatewayAuthenticationScheme")

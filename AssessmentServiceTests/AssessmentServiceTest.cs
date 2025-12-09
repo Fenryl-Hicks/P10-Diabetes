@@ -23,7 +23,7 @@ namespace AssessmentServiceTests
         {
             int age = 35;
             string gender = "M";
-            var notes = new List<string> { "Patient présente Hémoglobine A1C élevée", "Poids anormal détecté" };
+            var notes = new List<string> { "Patient présente Hémoglobine A1C élevée", "Poids excessif détecté" };
             var risk = DiabetesRiskCalculator.CalculateRisk(age, gender, notes);
             Assert.Equal(RiskLevel.Borderline, risk);
         }
@@ -54,7 +54,7 @@ namespace AssessmentServiceTests
         {
             int age = 25;
             string gender = "M";
-            var notes = new List<string> { "Hémoglobine A1C anormal", "Microalbumine détectée", "Fumeur" };
+            var notes = new List<string> { "Hémoglobine A1C élevée", "Microalbumine détectée", "Fumeur" };
             var risk = DiabetesRiskCalculator.CalculateRisk(age, gender, notes);
             Assert.Equal(RiskLevel.InDanger, risk);
         }
@@ -201,7 +201,7 @@ namespace AssessmentServiceTests
         {
             int age = 35;
             string gender = "M";
-            var notes = new List<string> { "hémoglobine a1c élevée", "MICROALBUMINE détectée", "Poids anormal" };
+            var notes = new List<string> { "hémoglobine a1c élevée", "MICROALBUMINE détectée", "Poids excessif" };
             var risk = DiabetesRiskCalculator.CalculateRisk(age, gender, notes);
             Assert.Equal(RiskLevel.Borderline, risk);
         }
@@ -228,13 +228,13 @@ namespace AssessmentServiceTests
             Assert.Equal(RiskLevel.None, risk);
         }
 
-        // ? Tests pour le comptage unique des triggers
+        // Tests pour le comptage unique des triggers
         [Fact]
         public void CountTriggers_DuplicateTriggerInSameNote_CountsOnlyOnce()
         {
-            var notes = new List<string> { "Patient avec Poids élevé et Poids anormal, Poids problématique" };
+            var notes = new List<string> { "Patient avec Poids élevé et Poids excessif, contrôle du Poids nécessaire" };
             var count = DiabetesRiskCalculator.CountTriggers(notes);
-            Assert.Equal(1, count);
+            Assert.Equal(1, count); // "Poids" apparaît 3 fois mais compte 1 seule fois
         }
 
         [Fact]
@@ -243,22 +243,22 @@ namespace AssessmentServiceTests
             var notes = new List<string> 
             { 
                 "Patient avec Poids élevé", 
-                "Poids anormal détecté",
+                "Poids excessif détecté",
                 "Contrôle du Poids nécessaire" 
             };
             var count = DiabetesRiskCalculator.CountTriggers(notes);
-            Assert.Equal(1, count);
+            Assert.Equal(1, count); // "Poids" dans 3 notes différentes compte 1 seule fois
         }
 
         [Fact]
         public void CountTriggers_MultipleDifferentTriggers_CountsCorrectly()
         {
-            var notes = new List<string> { "Hémoglobine A1C élevée, Poids anormal, Taille normale" };
+            var notes = new List<string> { "Hémoglobine A1C élevée, Poids excessif, Taille normale" };
             var count = DiabetesRiskCalculator.CountTriggers(notes);
-            Assert.Equal(3, count);
+            Assert.Equal(3, count); // Hémoglobine A1C, Poids, Taille
         }
 
-        // ? Tests pour CalculateAge
+        // Tests pour CalculateAge
         [Fact]
         public void CalculateAge_ValidBirthDate_ReturnsCorrectAge()
         {
@@ -277,7 +277,7 @@ namespace AssessmentServiceTests
             Assert.Equal(0, age);
         }
 
-        // ? Tests pour CalculateRiskFromPatient
+        // Tests pour CalculateRiskFromPatient
         [Fact]
         public void CalculateRiskFromPatient_ValidPatientAndNotes_ReturnsCorrectRisk()
         {
@@ -292,7 +292,7 @@ namespace AssessmentServiceTests
             var notes = new List<NoteDto>
             {
                 new NoteDto { Id = "1", PatientId = 1, Content = "Hémoglobine A1C élevée" },
-                new NoteDto { Id = "2", PatientId = 1, Content = "Poids anormal" }
+                new NoteDto { Id = "2", PatientId = 1, Content = "Poids excessif" }
             };
 
             var risk = DiabetesRiskCalculator.CalculateRiskFromPatient(patient, notes);

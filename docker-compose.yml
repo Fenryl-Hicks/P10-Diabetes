@@ -1,0 +1,155 @@
+version: '3.8'
+
+services:
+  # SQL Server Database
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: p10-sqlserver
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=YourStrong!Passw0rd
+      - MSSQL_PID=Developer
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqlserver_data:/var/opt/mssql
+    networks:
+      - p10-network
+    healthcheck:
+      test: /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P "YourStrong!Passw0rd" -Q "SELECT 1" || exit 1
+      interval: 10s
+      retries: 10
+      start_period: 10s
+      timeout: 3s
+
+  # MongoDB Database
+  mongodb:
+    image: mongo:7.0
+    container_name: p10-mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - p10-network
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+      interval: 10s
+      retries: 10
+      start_period: 10s
+      timeout: 3s
+
+  # IdentityService
+  identityservice:
+    build:
+      context: .
+      dockerfile: IdentityService/Dockerfile
+    container_name: p10-identityservice
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Docker
+      - DOTNET_RUNNING_IN_CONTAINER=true
+    ports:
+      - "7010:80"
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+    networks:
+      - p10-network
+    restart: on-failure
+
+  # PatientService
+  patientservice:
+    build:
+      context: .
+      dockerfile: PatientService/Dockerfile
+    container_name: p10-patientservice
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Docker
+      - DOTNET_RUNNING_IN_CONTAINER=true
+    ports:
+      - "7070:80"
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+    networks:
+      - p10-network
+    restart: on-failure
+
+  # NoteService
+  noteservice:
+    build:
+      context: .
+      dockerfile: NoteService/Dockerfile
+    container_name: p10-noteservice
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Docker
+      - DOTNET_RUNNING_IN_CONTAINER=true
+    ports:
+      - "7080:80"
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    networks:
+      - p10-network
+    restart: on-failure
+
+  # AssessmentService
+  assessmentservice:
+    build:
+      context: .
+      dockerfile: AssessmentService/Dockerfile
+    container_name: p10-assessmentservice
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Docker
+      - DOTNET_RUNNING_IN_CONTAINER=true
+    ports:
+      - "7008:80"
+    depends_on:
+      - gateway
+    networks:
+      - p10-network
+    restart: on-failure
+
+  # Ocelot Gateway
+  gateway:
+    build:
+      context: .
+      dockerfile: OcelotGateway/Dockerfile
+    container_name: p10-gateway
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Docker
+      - DOTNET_RUNNING_IN_CONTAINER=true
+    ports:
+      - "7050:80"
+    depends_on:
+      - identityservice
+      - patientservice
+      - noteservice
+    networks:
+      - p10-network
+    restart: on-failure
+
+  # Frontend
+  frontend:
+    build:
+      context: .
+      dockerfile: Frontend/Dockerfile
+    container_name: p10-frontend
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Docker
+      - DOTNET_RUNNING_IN_CONTAINER=true
+    ports:
+      - "5000:80"
+    depends_on:
+      - gateway
+    networks:
+      - p10-network
+    restart: on-failure
+
+networks:
+  p10-network:
+    driver: bridge
+
+volumes:
+  sqlserver_data:
+  mongodb_data:

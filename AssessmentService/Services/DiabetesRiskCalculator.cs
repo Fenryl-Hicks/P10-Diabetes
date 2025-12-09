@@ -1,5 +1,6 @@
 using AssessmentService.Models;
 using AssessmentService.Models.DTOs;
+using System.Text.RegularExpressions;
 
 namespace AssessmentService.Services
 {
@@ -15,7 +16,7 @@ namespace AssessmentService.Services
             "Fumeuse",
             "Anormal",
             "Cholestérol",
-            "Vertige",
+            "Vertiges",
             "Rechute",
             "Réaction",
             "Anticorps"
@@ -86,18 +87,24 @@ namespace AssessmentService.Services
         /// </summary>
         public static int CountTriggers(List<string> notes)
         {
-            string combinedNotes = string.Join(" ", notes).ToLower();
+            string combinedNotes = string.Join(" ", notes);
             
-            int count = 0;
+            // HashSet pour s'assurer qu'on ne compte chaque trigger qu'une seule fois
+            HashSet<string> foundTriggers = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            
             foreach (var trigger in Triggers)
             {
-                if (combinedNotes.Contains(trigger.ToLower(), StringComparison.OrdinalIgnoreCase))
+                // Créer un pattern qui cherche le trigger comme mot entier
+                // Pour les triggers avec espaces (comme "Hémoglobine A1C"), on cherche la phrase exacte
+                string pattern = $@"(?<!\w){Regex.Escape(trigger)}(?!\w)";
+                
+                if (Regex.IsMatch(combinedNotes, pattern, RegexOptions.IgnoreCase))
                 {
-                    count++;
+                    foundTriggers.Add(trigger);
                 }
             }
 
-            return count;
+            return foundTriggers.Count;
         }
 
         /// <summary>
