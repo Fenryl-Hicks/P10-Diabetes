@@ -1,0 +1,17 @@
+@model P10.Frontend.Models.NoteViewModel
+@{
+    ViewData["Title"] = "Modifier la note";
+    var patientId = ViewBag.PatientId;
+}
+<h1 class="mt-4">Modifier la note</h1>
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="Id" />
+    <input type="hidden" asp-for="PatientId" />
+    <div class="mb-3">
+        <label asp-for="Content" class="form-label">Contenu</label>
+        <textarea asp-for="Content" class="form-control"></textarea>
+        <span asp-validation-for="Content" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Enregistrer</button>
+    <a asp-action="Index" asp-route-patientId="@patientId" class="btn btn-secondary">Annuler</a>
+</form>

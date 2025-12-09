@@ -1,0 +1,15 @@
+﻿@{
+    ViewData["Title"] = "Accueil";
+}
+<div class="text-center">
+    <h1 class="display-4">Bienvenue sur MédiLabo Solutions</h1>
+    <p class="lead">Plateforme de gestion des patients et d'évaluation du risque diabète</p>
+    @if (Context.Session.GetString("JwtToken") != null)
+    {
+        <a asp-controller="Patient" asp-action="Index" class="btn btn-primary btn-lg">Accéder aux patients</a>
+    }
+    else
+    {
+        <a asp-controller="Auth" asp-action="Login" class="btn btn-primary btn-lg">Se connecter</a>
+    }
+</div>

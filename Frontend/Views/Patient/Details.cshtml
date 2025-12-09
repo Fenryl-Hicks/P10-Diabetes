@@ -1,0 +1,73 @@
+﻿@model P10.Frontend.Models.PatientViewModel
+
+@{
+    ViewData["Title"] = "Détail du patient";
+    
+    string GetRiskLabel(string? risk)
+    {
+        return risk switch
+        {
+            "None" => "Aucun risque",
+            "Borderline" => "Risque limité",
+            "InDanger" => "Danger",
+            "EarlyOnset" => "Apparition précoce",
+            _ => "Inconnu"
+        };
+    }
+}
+
+<h1 class="mt-4">Détail du patient</h1>
+
+@if (Model == null)
+{
+    <div class="alert alert-warning mt-3">
+        Patient introuvable.
+    </div>
+}
+else
+{
+    <dl class="row mt-3">
+        <dt class="col-sm-3">Nom</dt>
+        <dd class="col-sm-9">@Model.LastName</dd>
+
+        <dt class="col-sm-3">Prénom</dt>
+        <dd class="col-sm-9">@Model.FirstName</dd>
+
+        <dt class="col-sm-3">Date de naissance</dt>
+        <dd class="col-sm-9">@Model.BirthDate?.ToString("dd/MM/yyyy")</dd>
+
+        <dt class="col-sm-3">Genre</dt>
+        <dd class="col-sm-9">@Model.GenderName</dd>
+
+        <dt class="col-sm-3">Adresse</dt>
+        <dd class="col-sm-9">@Model.Address</dd>
+
+        <dt class="col-sm-3">Téléphone</dt>
+        <dd class="col-sm-9">@Model.Phone</dd>
+
+        <dt class="col-sm-3">Risque de diabète</dt>
+        <dd class="col-sm-9">@GetRiskLabel(Model.DiabetesRisk)</dd>
+    </dl>
+
+    <a asp-controller="Note"
+       asp-action="Index"
+       asp-route-patientId="@Model.Id"
+       class="btn btn-info mt-3 float-end">
+        Afficher les notes
+    </a>
+
+    <a asp-controller="Patient"
+       asp-action="Edit"
+       asp-route-id="@Model.Id"
+       class="btn btn-warning mt-3">
+        Modifier
+    </a>
+    <form asp-controller="Patient" asp-action="Delete" asp-route-id="@Model.Id" method="post" style="display:inline">
+        <button type="submit" class="btn btn-danger mt-3" onclick="return confirm('Confirmer la suppression ?');">Supprimer</button>
+    </form>
+    <a asp-controller="Patient"
+       asp-action="Index"
+       class="btn btn-secondary mt-3">
+        Retour à la liste
+    </a>
+}
