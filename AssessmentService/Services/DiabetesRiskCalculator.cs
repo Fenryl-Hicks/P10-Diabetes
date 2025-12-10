@@ -1,4 +1,4 @@
-using AssessmentService.Models;
+ï»¿using AssessmentService.Models;
 using AssessmentService.Models.DTOs;
 using System.Text.RegularExpressions;
 
@@ -8,7 +8,7 @@ namespace AssessmentService.Services
     {
         private static readonly List<string> Triggers = new()
         {
-            "Hémoglobine A1C",
+            "HÃ©moglobine A1C",
             "Microalbumine",
             "Taille",
             "Poids",
@@ -16,15 +16,15 @@ namespace AssessmentService.Services
             "Fumeuse",
             "Fumer",
             "Anormal",
-            "Cholestérol",
+            "CholestÃ©rol",
             "Vertige",
             "Rechute",
-            "Réaction",
+            "RÃ©action",
             "Anticorps"
         };
 
         /// <summary>
-        /// Calcule le niveau de risque de diabète pour un patient
+        /// Calcule le niveau de risque de diabÃ¨te pour un patient
         /// </summary>
         public static RiskLevel CalculateRiskFromPatient(PatientDto patient, List<NoteDto> notes)
         {
@@ -36,7 +36,7 @@ namespace AssessmentService.Services
         }
 
         /// <summary>
-        /// Calcule le niveau de risque de diabète selon l'âge, le genre et les notes
+        /// Calcule le niveau de risque de diabÃ¨te selon l'Ã¢ge, le genre et les notes
         /// </summary>
         public static RiskLevel CalculateRisk(int age, string gender, List<string> notes)
         {
@@ -84,7 +84,7 @@ namespace AssessmentService.Services
         }
 
         /// <summary>
-        /// Compte le nombre de termes déclencheurs présents dans les notes (une seule occurrence par trigger)
+        /// Compte le nombre de termes dÃ©clencheurs prÃ©sents dans les notes (une seule occurrence par trigger)
         /// </summary>
         public static int CountTriggers(List<string> notes)
         {
@@ -103,7 +103,7 @@ namespace AssessmentService.Services
         }
 
         /// <summary>
-        /// Calcule l'âge d'un patient à partir de sa date de naissance
+        /// Calcule l'Ã¢ge d'un patient Ã  partir de sa date de naissance
         /// </summary>
         public static int CalculateAge(DateTime? birthDate)
         {

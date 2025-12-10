@@ -1,11 +1,11 @@
-@model IEnumerable<P10.Frontend.Models.NoteViewModel>
+ï»¿@model IEnumerable<P10.Frontend.Models.NoteViewModel>
 @{
     ViewData["Title"] = "Notes";
     var patientId = ViewBag.PatientId;
 }
 <h1 class="mt-4">Notes du patient</h1>
 <div class="d-flex justify-content-end mb-3">
-    <a asp-action="Create" asp-route-patientId="@patientId" class="btn btn-primary">Créer une note</a>
+    <a asp-action="Create" asp-route-patientId="@patientId" class="btn btn-primary">CrÃ©er une note</a>
 </div>
 @if (TempData["Error"] != null)
 {
@@ -13,7 +13,7 @@
 }
 @if (!Model.Any())
 {
-    <div class="alert alert-info mt-3">Aucune note trouvée.</div>
+    <div class="alert alert-info mt-3">Aucune note trouvÃ©e.</div>
 }
 else
 {
