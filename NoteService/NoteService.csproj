@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-	<ProjectReference Include="..\\PatientService\\PatientService.csproj" />
+	<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.22" />
     <PackageReference Include="MongoDB.EntityFrameworkCore" Version="8.3.3" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
   </ItemGroup>
