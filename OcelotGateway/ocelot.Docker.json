@@ -6,7 +6,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "identityservice",
-          "Port": 80
+          "Port": 8080
         }
       ],
       "UpstreamPathTemplate": "/api/auth/{everything}",
@@ -19,7 +19,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "patientservice",
-          "Port": 80
+          "Port": 8080
         }
       ],
       "UpstreamPathTemplate": "/api/patients/{everything}",
@@ -36,7 +36,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "noteservice",
-          "Port": 80
+          "Port": 8080
         }
       ],
       "UpstreamPathTemplate": "/api/notes/{everything}",
@@ -53,7 +53,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "assessmentservice",
-          "Port": 80
+          "Port": 8080
         }
       ],
       "UpstreamPathTemplate": "/api/assessment/{everything}",
