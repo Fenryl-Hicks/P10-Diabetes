@@ -17,7 +17,7 @@ namespace AssessmentService.Services
             "Fumer",
             "Anormal",
             "Cholestérol",
-            "Vertiges",
+            "Vertige",
             "Rechute",
             "Réaction",
             "Anticorps"
