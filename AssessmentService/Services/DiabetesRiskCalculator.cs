@@ -14,6 +14,7 @@ namespace AssessmentService.Services
             "Poids",
             "Fumeur",
             "Fumeuse",
+            "Fumer",
             "Anormal",
             "Cholestérol",
             "Vertiges",
@@ -87,24 +88,18 @@ namespace AssessmentService.Services
         /// </summary>
         public static int CountTriggers(List<string> notes)
         {
-            string combinedNotes = string.Join(" ", notes);
-            
-            // HashSet pour s'assurer qu'on ne compte chaque trigger qu'une seule fois
-            HashSet<string> foundTriggers = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-            
+            string combinedNotes = string.Join(" ", notes).ToLower();
+
+            int count = 0;
             foreach (var trigger in Triggers)
             {
-                // Créer un pattern qui cherche le trigger comme mot entier
-                // Pour les triggers avec espaces (comme "Hémoglobine A1C"), on cherche la phrase exacte
-                string pattern = $@"(?<!\w){Regex.Escape(trigger)}(?!\w)";
-                
-                if (Regex.IsMatch(combinedNotes, pattern, RegexOptions.IgnoreCase))
+                if (combinedNotes.Contains(trigger.ToLower(), StringComparison.OrdinalIgnoreCase))
                 {
-                    foundTriggers.Add(trigger);
+                    count++;
                 }
             }
 
-            return foundTriggers.Count;
+            return count;
         }
 
         /// <summary>

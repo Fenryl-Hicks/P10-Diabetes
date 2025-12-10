@@ -51,7 +51,26 @@ var app = builder.Build();
 // Seed admin user and role
 using (var scope = app.Services.CreateScope())
 {
-    await RoleInitializer.InitializeAsync(scope.ServiceProvider);
+    var services = scope.ServiceProvider;
+    var logger = services.GetRequiredService<ILogger<Program>>();
+    
+    try
+    {
+        var context = services.GetRequiredService<AuthDbContext>();
+        
+        // 1. Appliquer les migrations automatiquement
+        logger.LogInformation("Applying database migrations for IdentityService...");
+        context.Database.Migrate();
+        
+        // 2. Seeding des rôles et admin (déjà existant)
+        logger.LogInformation("Seeding roles and admin user...");
+        await RoleInitializer.InitializeAsync(services);
+    }
+    catch (Exception ex)
+    {
+        logger.LogError(ex, "An error occurred while migrating or seeding the identity database.");
+        throw;
+    }
 }
 
 if (app.Environment.IsDevelopment())

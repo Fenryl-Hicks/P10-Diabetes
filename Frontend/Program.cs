@@ -5,14 +5,29 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddHttpClient<IPatientApiClient, PatientApiClient>();
-builder.Services.AddHttpClient<INoteApiClient, NoteApiClient>();
-builder.Services.AddHttpClient<IAssessmentApiClient, AssessmentApiClient>();
+// Récupérer l'URL de la Gateway depuis la configuration
+var gatewayBaseUrl = builder.Configuration["ApiGateway:BaseUrl"] 
+    ?? throw new InvalidOperationException("ApiGateway:BaseUrl configuration is missing");
 
-// HttpClient typé pour appeler IdentityService
+// HttpClients configurés avec l'URL de la Gateway
+builder.Services.AddHttpClient<IPatientApiClient, PatientApiClient>(client =>
+{
+    client.BaseAddress = new Uri(gatewayBaseUrl);
+});
+
+builder.Services.AddHttpClient<INoteApiClient, NoteApiClient>(client =>
+{
+    client.BaseAddress = new Uri(gatewayBaseUrl);
+});
+
+builder.Services.AddHttpClient<IAssessmentApiClient, AssessmentApiClient>(client =>
+{
+    client.BaseAddress = new Uri(gatewayBaseUrl);
+});
+
 builder.Services.AddHttpClient<IAuthApiClient, AuthApiClient>(client =>
 {
-    client.BaseAddress = new Uri("https://localhost:7050"); // Port gateway
+    client.BaseAddress = new Uri(gatewayBaseUrl);
 });
 
 // Session pour stocker le token côté front
@@ -36,7 +51,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-// 👉 Middleware Session à activer ici
+// Middleware Session
 app.UseSession();
 
 app.UseAuthorization();

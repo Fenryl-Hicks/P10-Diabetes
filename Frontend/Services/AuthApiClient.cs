@@ -20,7 +20,6 @@ namespace P10.Frontend.Services
         {
             _httpClient = httpClient;
             _logger = logger;
-            _httpClient.BaseAddress = new Uri("https://localhost:7050"); // Ocelot Gateway
         }
 
         public async Task<string?> LoginAsync(string username, string password)

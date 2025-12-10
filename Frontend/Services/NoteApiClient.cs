@@ -15,7 +15,6 @@ namespace P10.Frontend.Services
         {
             _httpClient = httpClient;
             _logger = logger;
-            _httpClient.BaseAddress = new Uri("https://localhost:7050"); // Gateway
         }
 
         public async Task<List<NoteViewModel>> GetNotesByPatientAsync(int patientId, string token)

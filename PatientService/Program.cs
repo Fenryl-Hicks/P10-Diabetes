@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using PatientService.Data;
+using PatientService.Models;
 using PatientService.Repositories;
 using PatientService.Repositories.Interfaces;
 using PatientService.Services;
@@ -69,6 +70,40 @@ builder.Services.AddAuthentication(options =>
 });
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    var logger = services.GetRequiredService<ILogger<Program>>();
+
+    try
+    {
+        var context = services.GetRequiredService<PatientDbContext>();
+
+        // 1. Appliquer les migrations automatiquement
+        logger.LogInformation("Applying database migrations...");
+        context.Database.Migrate();
+
+        // 2. Seeding des patients de test si la base est vide
+        if (!context.Patients.Any())
+        {
+            logger.LogInformation("Seeding test patients...");
+
+            var patients = new List<Patient>
+            {
+                // 4 patients de test insérés automatiquement
+            };
+
+            context.Patients.AddRange(patients);
+            context.SaveChanges();
+        }
+    }
+    catch (Exception ex)
+    {
+        logger.LogError(ex, "An error occurred while migrating or seeding the database.");
+        throw;
+    }
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

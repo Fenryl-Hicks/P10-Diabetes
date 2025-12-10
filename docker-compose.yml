@@ -15,12 +15,6 @@ services:
       - sqlserver_data:/var/opt/mssql
     networks:
       - p10-network
-    healthcheck:
-      test: /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P "YourStrong!Passw0rd" -Q "SELECT 1" || exit 1
-      interval: 10s
-      retries: 10
-      start_period: 10s
-      timeout: 3s
 
   # MongoDB Database
   mongodb:
@@ -32,12 +26,6 @@ services:
       - mongodb_data:/data/db
     networks:
       - p10-network
-    healthcheck:
-      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
-      interval: 10s
-      retries: 10
-      start_period: 10s
-      timeout: 3s
 
   # IdentityService
   identityservice:
@@ -49,7 +37,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Docker
       - DOTNET_RUNNING_IN_CONTAINER=true
     ports:
-      - "7010:80"
+      - "7010:8080"
     depends_on:
       sqlserver:
         condition: service_healthy
@@ -67,7 +55,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Docker
       - DOTNET_RUNNING_IN_CONTAINER=true
     ports:
-      - "7070:80"
+      - "7070:8080"
     depends_on:
       sqlserver:
         condition: service_healthy
@@ -85,7 +73,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Docker
       - DOTNET_RUNNING_IN_CONTAINER=true
     ports:
-      - "7080:80"
+      - "7080:8080"
     depends_on:
       mongodb:
         condition: service_healthy
@@ -103,7 +91,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Docker
       - DOTNET_RUNNING_IN_CONTAINER=true
     ports:
-      - "7008:80"
+      - "7008:8080"
     depends_on:
       - gateway
     networks:
@@ -120,7 +108,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Docker
       - DOTNET_RUNNING_IN_CONTAINER=true
     ports:
-      - "7050:80"
+      - "7050:8080"
     depends_on:
       - identityservice
       - patientservice
@@ -139,7 +127,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Docker
       - DOTNET_RUNNING_IN_CONTAINER=true
     ports:
-      - "5000:80"
+      - "5000:8080"
     depends_on:
       - gateway
     networks:
