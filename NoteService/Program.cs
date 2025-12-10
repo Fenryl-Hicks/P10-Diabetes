@@ -42,8 +42,8 @@ builder.Services.AddSwaggerGen(options =>
 });
 
 // MongoDB
-var mongoConnectionString = builder.Configuration.GetSection("MongoDbSettings:ConnectionString").Value!;
-var mongoDatabaseName = builder.Configuration.GetSection("MongoDbSettings:DatabaseName").Value!;
+var mongoConnectionString = builder.Configuration.GetSection("NotesDatabase:ConnectionString").Value!;
+var mongoDatabaseName = builder.Configuration.GetSection("NotesDatabase:DatabaseName").Value!;
 
 builder.Services.AddDbContext<NoteServiceDbContext>(options =>
     options.UseMongoDB(mongoConnectionString, mongoDatabaseName));
